@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Profile Card</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --main: #7B5E3B;
+      --accent1: #A3A380;
+      --accent2: #6B8F71;
+      --neutral: #E6DED7;
+      --leaf1: #B7C68B;
+      --leaf2: #A7C7A3;
+      --mushroom: #D8CFC4;
+      --mushroom-spot: #B7A99A;
+      --highlight: #fffbe6;
+      --shadow: 0 4px 24px rgba(123,94,59,0.10);
+    }
+    body {
+      background: linear-gradient(135deg, var(--neutral) 60%, var(--main) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', 'Georgia', serif;
+      text-align: center;
+      background-image:
+        radial-gradient(var(--leaf1) 1.5px, transparent 1.5px),
+        radial-gradient(var(--leaf2) 1.5px, transparent 1.5px);
+      background-size: 40px 40px, 80px 80px;
+      background-position: 0 0, 20px 20px;
+      width: 100vw;
+      overflow-x: hidden;
+      opacity: 0;
+      animation: fadeInBody 1.2s ease 0.1s forwards;
+    }
+    @keyframes fadeInBody {
+      to { opacity: 1; }
+    }
+    .tabs-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+      background: var(--neutral);
+      border-bottom: 2px solid var(--main);
+      border-radius: 18px 18px 0 0;
+      padding: 0.7rem 0 0.3rem 0;
+      margin: 2rem auto 0.5rem auto;
+      max-width: 1100px;
+      width: 90vw;
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(123,94,59,0.06);
+      text-align: center;
+      font-size: 0.98rem;
+      /* Add glassmorphism effect */
+      background: rgba(230,222,215,0.85);
+      backdrop-filter: blur(2px);
+      border: 1.5px solid rgba(123,94,59,0.08);
+    }
+    @media (max-width: 1200px) {
+      .tabs-nav {
+        max-width: 98vw;
+        width: 98vw;
+      }
+    }
+    .tabs-nav a {
+      color: var(--main);
+      text-decoration: none;
+      font-family: 'Georgia', serif;
+      font-size: 1.08rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 0.3em 1.2em;
+      border-radius: 10px 10px 0 0;
+      transition: background 0.2s, color 0.2s;
+      position: relative;
+      top: 2px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 4px rgba(123,94,59,0.04);
+      overflow: hidden;
+    }
+    .tabs-nav a.active,
+    .tabs-nav a:hover {
+      background: var(--accent1);
+      color: var(--accent2);
+      box-shadow: 0 2px 8px rgba(107,143,113,0.08);
+    }
+    .tabs-nav a.active::after,
+    .tabs-nav a:hover::after {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent2), var(--main));
+      border-radius: 2px;
+      opacity: 0.7;
+    }
+    .container {
+      background: var(--accent1);
+      border-radius: 28px;
+      box-shadow: 0 12px 40px rgba(123,94,59,0.18), 0 2px 12px rgba(107,143,113,0.13);
+      padding: 2.7rem 2.5rem 2.2rem 2.5rem;
+      max-width: 1100px;
+      min-width: 340px;
+      width: 90vw;
+      margin: 0 auto 2rem auto;
+      /* Add a soft border highlight */
+      border: 3px solid var(--main);
+      background: linear-gradient(120deg, var(--accent1) 80%, var(--highlight) 100%);
+      transition: box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      display: flex;
+      flex-direction: row;
+      gap: 2.5rem;
+      justify-content: center;
+      align-items: center;
+    }
+    @media (max-width: 1200px) {
+      .container {
+        flex-direction: column;
+        max-width: 98vw;
+        width: 98vw;
+        gap: 0;
+        padding: 1.5rem 0.5rem;
+        left: 0;
+        transform: none;
+        margin-left: auto;
+        margin-right: auto;
+        /* Optionally, reduce width for a more "journal" look */
+        max-width: 900px;
+        width: 80vw;
+      }
+    }
+    .profile-card {
+      min-width: 260px;
+      max-width: 340px;
+      flex: 1 1 320px;
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .profile-upload {
+      margin-bottom: 0.2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+      width: 100%;
+    }
+    .profile-upload label {
+      font-size: 0.92rem;
+      color: var(--main);
+      cursor: pointer;
+      background: none;
+      font-family: 'Georgia', serif;
+      letter-spacing: 0.2px;
+      padding: 0;
+      border-radius: 6px;
+      transition: color 0.2s;
+      margin-bottom: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.3em;
+      border: none;
+    }
+    .profile-upload label:hover {
+      color: var(--accent2);
+      background: none;
+    }
+    .profile-upload input[type="file"] {
+      display: none;
+    }
+    .edit-profile-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3em;
+      margin-top: 0.2em;
+      color: var(--main);
+      cursor: pointer;
+      font-size: 0.97rem;
+      font-family: 'Georgia', serif;
+      transition: color 0.2s;
+      opacity: 0.85;
+    }
+    .edit-profile-icon:hover {
+      color: var(--accent2);
+      opacity: 1;
+    }
+    .edit-profile-icon svg {
+      width: 1.1em;
+      height: 1.1em;
+      margin-right: 0.2em;
+      vertical-align: middle;
+      display: inline-block;
+    }
+    .profile-card img {
+      display: block;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 1rem;
+      border: 5px solid var(--accent2);
+      background: #f7f7f7 url('data:image/svg+xml;utf8,<svg width="110" height="110" xmlns="http://www.w3.org/2000/svg"><circle cx="55" cy="55" r="52" fill="%23f7f7f7"/></svg>') center center no-repeat;
+      box-shadow: 0 2px 16px rgba(123, 94, 59, 0.13);
+      transition: border 0.3s, box-shadow 0.3s, transform 0.2s;
+    }
+    .profile-card img[src=""], .profile-card img:not([src]) {
+      background: #f7f7f7 url('data:image/svg+xml;utf8,<svg width="110" height="110" xmlns="http://www.w3.org/2000/svg"><circle cx="55" cy="55" r="52" fill="%23f7f7f7"/></svg>') center center no-repeat;
+    }
+    .profile-card h2 {
+      margin: 0.5rem 0 0.25rem 0;
+      font-size: 1.8rem;
+      color: var(--main);
+      letter-spacing: 1.5px;
+      font-weight: 700;
+      font-family: 'Georgia', serif;
+      text-shadow: 0 2px 8px rgba(123,94,59,0.08);
+    }
+    .profile-card h3 {
+      margin: 0 0 1rem 0;
+      font-size: 1.1rem;
+      color: var(--accent2);
+      font-weight: 500;
+      letter-spacing: 0.7px;
+      font-family: 'Georgia', serif;
+      text-shadow: 0 1px 4px rgba(107,143,113,0.08);
+    }
+    .sections-wrapper {
+      flex: 2 1 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.7rem;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+    .section {
+      margin-bottom: 1.7rem;
+      background: rgba(230, 222, 215, 0.55);
+      border-radius: 14px;
+      padding: 1.1rem 1rem 0.8rem 1rem;
+      box-shadow: var(--shadow);
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      border-left: 4px solid var(--accent2);
+      border-right: 4px solid var(--accent2);
+      width: 100%;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.98rem;
+      /* Add a border and shadow for depth */
+      border: 1.5px solid var(--accent2);
+      background: linear-gradient(120deg, rgba(230,222,215,0.65) 80%, var(--highlight) 100%);
+      /* Add a fade-in animation */
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInSection 0.8s forwards;
+    }
+    .section:nth-child(1) { animation-delay: 0.1s; }
+    .section:nth-child(2) { animation-delay: 0.2s; }
+    .section:nth-child(3) { animation-delay: 0.3s; }
+    .section:nth-child(4) { animation-delay: 0.4s; }
+    .section:nth-child(5) { animation-delay: 0.5s; }
+    @keyframes fadeInSection {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .section:last-child {
+      margin-bottom: 0;
+    }
+    .section h4 {
+      margin-bottom: 0.5rem;
+      color: var(--main);
+      font-size: 1rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      justify-content: center;
+      font-family: 'Georgia', serif;
+      text-align: center;
+      text-shadow: 0 2px 12px rgba(167,199,163,0.18), 0 1px 2px rgba(123,94,59,0.08);
+    }
+    .section h4 .icon {
+      width: 1.3em;
+      height: 1.3em;
+      vertical-align: middle;
+      display: inline-block;
+      margin-right: 0.3em;
+      color: var(--accent2);
+    }
+    .skills-list, .projects-list {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+      margin: 0 auto;
+    }
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0;
+      list-style: none;
+    }
+    .skills-list li {
+      background: var(--leaf2);
+      border-radius: 12px;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.97rem;
+      color: #222;
+      font-weight: 500;
+      box-shadow: 0 1px 4px rgba(107, 143, 113, 0.10);
+      transition: background 0.2s, color 0.2s, transform 0.18s, box-shadow 0.18s;
+      display: flex;
+      align-items: center;
+      gap: 0.3em;
+      position: relative;
+      padding-left: 2em;
+      font-family: 'Georgia', serif;
+      margin: 0.2em 0.2em;
+      justify-content: center;
+    }
+    .skills-list li::before {
+      content: "";
+      display: inline-block;
+      position: absolute;
+      left: 0.5em;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1em;
+      height: 1em;
+      background: var(--accent2);
+      border-radius: 50%;
+      opacity: 0.25;
+    }
+    .skills-list li:hover {
+      background: var(--main);
+      color: #fff;
+      transform: scale(1.07);
+      box-shadow: 0 4px 16px rgba(107,143,113,0.18);
+    }
+    .projects-list {
+      padding: 0;
+      list-style: none;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .projects-list li {
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
+      position: relative;
+      padding-left: 2em;
+      background: var(--leaf1);
+      justify-content: center;
+      width: 100%;
+      max-width: 400px;
+      transition: background 0.2s, color 0.2s, transform 0.18s, box-shadow 0.18s;
+    }
+    .projects-list li::before {
+      content: "";
+      display: inline-block;
+      position: absolute;
+      left: 0.5em;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1em;
+      height: 1em;
+      background: var(--main);
+      border-radius: 3px;
+      opacity: 0.4;
+    }
+    .projects-list a {
+      color: var(--main);
+      text-decoration: none;
+      font-weight: 500;
+      border-bottom: 1.5px solid transparent;
+      transition: color 0.2s, border 0.2s;
+      font-family: 'Georgia', serif;
+      text-align: center;
+      margin: 0 auto;
+      display: inline-block;
+      font-size: 0.97rem;
+    }
+    .projects-list a:hover {
+      color: var(--accent2);
+      border-bottom: 1.5px solid var(--main);
+      text-decoration: underline;
+    }
+    .contact-info {
+      font-size: 1rem;
+      color: var(--accent2);
+      font-weight: 500;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3em;
+      align-items: center;
+      font-family: 'Georgia', serif;
+      text-align: center;
+    }
+    .contact-info .icon {
+      width: 1.1em;
+      height: 1.1em;
+      vertical-align: middle;
+      margin-right: 0.3em;
+      display: inline-block;
+      color: var(--accent2);
+    }
+    .contact-info a {
+      color: var(--main);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .contact-info a:hover {
+      color: var(--accent2);
+      text-decoration: underline;
+    }
+    .social-links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.2rem;
+      margin-top: 0.5rem;
+      width: 100%;
+    }
+    .social-links a {
+      color: var(--main);
+      font-size: 1.05rem;
+      text-decoration: none;
+      transition: color 0.2s, transform 0.2s, background 0.2s;
+      display: flex;
+      align-items: center;
+      font-family: 'Georgia', serif;
+      justify-content: center;
+      min-width: 120px;
+      max-width: 140px;
+      padding: 0.35em 0.5em;
+      border-radius: 8px;
+      box-sizing: border-box;
+      height: 44px;
+      text-align: left;
+      gap: 0.5em;
+    }
+    .social-links a .icon {
+      width: 1.5em;
+      height: 1.5em;
+      margin-right: 0.5em;
+      vertical-align: middle;
+      display: inline-block;
+      color: var(--main);
+      flex-shrink: 0;
+    }
+    .social-links a span:last-child {
+      flex: 1 1 auto;
+      text-align: left;
+      display: inline-block;
+      min-width: 60px;
+      font-size: 1.05rem;
+      font-family: 'Georgia', serif;
+      letter-spacing: 0.2px;
+    }
+    .social-links a:hover {
+      color: var(--accent2);
+      transform: scale(1.13);
+      background: var(--highlight);
+      box-shadow: 0 2px 8px rgba(123,94,59,0.08);
+    }
+    @media (max-width: 500px) {
+      .social-links a {
+        min-width: 90px;
+        max-width: 120px;
+        font-size: 0.93rem;
+        height: 38px;
+        padding: 0.2em 0.3em;
+      }
+      .social-links a .icon {
+        width: 1.2em;
+        height: 1.2em;
+        margin-right: 0.3em;
+      }
+      .social-links a span:last-child {
+        min-width: 40px;
+        font-size: 0.93rem;
+      }
+    }
+    /* Add a floating leaf animation */
+    .floating-leaf {
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      pointer-events: none;
+      opacity: 0.7;
+      z-index: 20;
+      animation: floatLeaf 7s linear infinite;
+    }
+    @keyframes floatLeaf {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 0.7;
+      }
+      80% {
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(100vh) rotate(60deg) scale(1.1);
+        opacity: 0;
+      }
+    }
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.2rem;
+      }
+      .sections-wrapper, .section {
+        width: 100%;
+        max-width: 98vw;
+      }
+    }
+    @media (max-width: 500px) {
+      .container {
+        padding: 1rem;
+        max-width: 98vw;
+      }
+      .section {
+        padding: 0.7rem 0.5rem 0.5rem 0.5rem;
+        width: 98vw;
+        max-width: 98vw;
+      }
+      .tabs-nav {
+        padding: 0.5rem 0 0.2rem 0;
+        gap: 0.5rem;
+      }
+      .social-links a {
+        min-width: 90px;
+        max-width: 120px;
+        font-size: 0.93rem;
+        height: 38px;
+        padding: 0.2em 0.3em;
+      }
+      .social-links a .icon {
+        width: 1.2em;
+        height: 1.2em;
+        margin-right: 0.3em;
+      }
+      .social-links a span:last-child {
+        min-width: 40px;
+        font-size: 0.93rem;
+      }
+    }
+    /* Polaroid frame styles */
+    .polaroid-frame {
+      background: #fffbe6;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px rgba(123, 94, 59, 0.13), 0 1.5px 8px rgba(107, 143, 113, 0.10);
+      border: 2.5px solid #e6ded7;
+      padding-top: 2.5rem;
+      padding-bottom: 1.5rem;
+      position: relative;
+      margin-bottom: 2rem;
+      margin-top: 0.5rem;
+      z-index: 2;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .polaroid-frame:hover {
+      box-shadow: 0 16px 48px rgba(123,94,59,0.22), 0 4px 16px rgba(107,143,113,0.18);
+      transform: translateY(-4px) scale(1.025);
+    }
+    .polaroid-photo {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 24px rgba(123,94,59,0.13), 0 1.5px 8px rgba(107,143,113,0.10);
+      border: 2.5px solid #e6ded7;
+      padding: 0.7rem 0.7rem 1.2rem 0.7rem;
+      margin-bottom: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 130px;
+      height: 150px;
+      position: relative;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .polaroid-photo img {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--accent2);
+      background: var(--accent1);
+      box-shadow: 0 2px 16px rgba(123, 94, 59, 0.13);
+      transition: border 0.3s, box-shadow 0.3s, transform 0.2s;
+      display: block;
+      margin: 0 auto;
+    }
+    .polaroid-tape {
+      position: absolute;
+      width: 38px;
+      height: 16px;
+      top: -14px;
+      z-index: 12;
+      background: #fffbe6;
+      border-radius: 6px;
+      border: 1.2px solid #B7A99A;
+      box-shadow: 0 2px 6px rgba(123,94,59,0.07);
+      opacity: 0.85;
+      transform: rotate(-7deg);
+    }
+    .polaroid-tape-left {
+      left: 18px;
+    }
+    .polaroid-tape-right {
+      right: 18px;
+      transform: rotate(7deg);
+    }
+    /* Welcome banner styles */
+    .welcome-banner {
+      width: 100vw;
+      max-width: 100vw;
+      margin: 0 auto 1.2rem auto;
+      padding: 1.2rem 0 1.1rem 0;
+      background: linear-gradient(90deg, var(--accent1) 70%, var(--highlight) 100%);
+      border-radius: 0 0 22px 22px;
+      box-shadow: 0 4px 24px rgba(123,94,59,0.07);
+      border-bottom: 2.5px solid var(--main);
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      animation: fadeInSection 0.8s 0.05s both;
+    }
+    .welcome-content h1 {
+      margin: 0 0 0.3rem 0;
+      font-size: 2.1rem;
+      color: var(--main);
+      font-family: 'Georgia', serif;
+      letter-spacing: 2px;
+      font-weight: 700;
+      text-shadow: 0 2px 12px rgba(167,199,163,0.13), 0 1px 2px rgba(123,94,59,0.08);
+    }
+    .welcome-content p {
+      margin: 0;
+      font-size: 1.13rem;
+      color: #222;
+      font-family: 'Georgia', serif;
+      letter-spacing: 0.5px;
+      opacity: 0.92;
+    }
+    @media (max-width: 600px) {
+      .welcome-banner {
+        padding: 0.7rem 0 0.7rem 0;
+        border-radius: 0 0 14px 14px;
+      }
+      .welcome-content h1 {
+        font-size: 1.3rem;
+      }
+      .welcome-content p {
+        font-size: 0.98rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Tabs navigation at the very top and centered -->
+  <nav class="tabs-nav">
+    <a href="#about" class="active">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+    <a href="#links">Links</a>
+  </nav>
+  <!-- Welcome Banner -->
+  <section class="welcome-banner">
+    <div class="welcome-content">
+      <h1>Welcome!</h1>
+      <p>Glad you're here. Explore my profile and projects below.</p>
+    </div>
+  </section>
+  <!-- Decorative SVG doodle at the top: Foresty leaves and mushroom -->
+  <svg class="doodle-top" width="320" height="80" viewBox="0 0 320 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto;">
+    <!-- Existing leaves and mushroom -->
+    <ellipse cx="60" cy="60" rx="18" ry="8" fill="#A7C7A3" opacity="0.7"/>
+    <ellipse cx="260" cy="60" rx="18" ry="8" fill="#B7C68B" opacity="0.7"/>
+    <ellipse cx="160" cy="30" rx="28" ry="12" fill="#A3A380" opacity="0.5"/>
+    <!-- Mushroom -->
+    <ellipse cx="160" cy="55" rx="12" ry="6" fill="#D8CFC4"/>
+    <ellipse cx="160" cy="52" rx="12" ry="6" fill="#B7A99A"/>
+    <ellipse cx="160" cy="50" rx="12" ry="6" fill="#D8CFC4"/>
+    <ellipse cx="160" cy="48" rx="12" ry="6" fill="#B7A99A"/>
+    <ellipse cx="160" cy="46" rx="12" ry="6" fill="#D8CFC4"/>
+    <!-- Tree trunk -->
+    <rect x="30" y="55" width="8" height="25" rx="3" fill="#7B5E3B"/>
+    <!-- Tree foliage -->
+    <ellipse cx="34" cy="55" rx="18" ry="12" fill="#A7C7A3" opacity="0.85"/>
+    <ellipse cx="34" cy="50" rx="12" ry="8" fill="#B7C68B" opacity="0.7"/>
+    <!-- Pine tree -->
+    <polygon points="290,70 300,50 310,70" fill="#6B8F71" opacity="0.8"/>
+    <polygon points="292,65 300,55 308,65" fill="#A3A380" opacity="0.7"/>
+    <rect x="297" y="70" width="6" height="10" rx="2" fill="#7B5E3B"/>
+    <!-- Journal doodle: tape -->
+    <rect x="120" y="10" width="40" height="8" rx="3" fill="#E6DED7" stroke="#B7A99A" stroke-width="1.2" opacity="0.7"/>
+    <rect x="200" y="10" width="30" height="8" rx="3" fill="#E6DED7" stroke="#B7A99A" stroke-width="1.2" opacity="0.7"/>
+    <!-- Dotted line for journal style -->
+    <line x1="10" y1="78" x2="310" y2="78" stroke="#B7A99A" stroke-width="1.2" stroke-dasharray="5,5" opacity="0.5"/>
+  </svg>
+  <!-- Scrapbook tape above profile card -->
+  <div style="width: 120px; margin: 0 auto; position: relative; top: 18px; z-index: 11;">
+    <svg width="120" height="18" viewBox="0 0 120 18" fill="none">
+      <rect x="0" y="0" width="120" height="18" rx="6" fill="#fffbe6" stroke="#B7A99A" stroke-width="1.2" opacity="0.85"/>
+      <rect x="10" y="4" width="100" height="4" rx="2" fill="#A3A380" opacity="0.18"/>
+      <rect x="30" y="10" width="60" height="3" rx="1.5" fill="#B7C68B" opacity="0.18"/>
+    </svg>
+  </div>
+  <div class="container">
+    <div class="profile-card polaroid-frame">
+      <!-- Polaroid tape -->
+      <div class="polaroid-tape polaroid-tape-left"></div>
+      <div class="polaroid-tape polaroid-tape-right"></div>
+      <div class="polaroid-photo">
+        <img id="profileImage" src="data:image/svg+xml;utf8,<svg width='110' height='110' xmlns='http://www.w3.org/2000/svg'><circle cx='55' cy='55' r='52' fill='%23f7f7f7'/><ellipse cx='55' cy='75' rx='28' ry='18' fill='%23a3a380'/><ellipse cx='55' cy='48' rx='20' ry='20' fill='%23b7c68b'/><ellipse cx='48' cy='45' rx='3' ry='4' fill='white'/><ellipse cx='62' cy='45' rx='3' ry='4' fill='white'/><ellipse cx='48' cy='46' rx='1.2' ry='2' fill='%236B8F71'/><ellipse cx='62' cy='46' rx='1.2' ry='2' fill='%236B8F71'/><ellipse cx='55' cy='58' rx='6' ry='3' fill='white' opacity='0.7'/><ellipse cx='55' cy='62' rx='3' ry='1.2' fill='%23B7A99A' opacity='0.5'/></svg>" alt="Profile Photo">
+        <div id="floating-leaves" style="pointer-events:none; position:fixed; left:0; top:0; width:100vw; height:100vh; z-index:100;"></div>
+        <div id="floating-leaves-left" style="pointer-events:none; position:fixed; left:0; top:0; width:100vw; height:100vh; z-index:100;"></div>
+      </div>
+      <form class="profile-upload">
+        <label for="profilePic" class="edit-profile-icon">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13.5 2.5l4 4-9.5 9.5H4v-4L13.5 2.5z"/>
+            <path d="M15 4.5l1.5 1.5"/>
+          </svg>
+          Edit
+        </label>
+        <input type="file" id="profilePic" accept="image/*" onchange="previewProfilePic(event)">
+      </form>
+      <h2>Jasmine No</h2>
+      <h3>Web Developer</h3>
+    </div>
+    <div class="sections-wrapper">
+      <div class="section about" id="about">
+        <h4>
+          <span class="icon">
+            <!-- User icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="4"/>
+              <path d="M4 20c0-4 16-4 16 0s-16 4-16 0z"/>
+            </svg>
+          </span>
+          About Me
+        </h4>
+        <p>Hello! I'm Jasmine, a passionate web developer who loves building beautiful and functional websites. I enjoy learning new technologies and collaborating on creative projects.</p>
+      </div>
+      <div class="section skills" id="skills">
+        <h4>
+          <span class="icon">
+            <!-- Tools icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15.232 5.232l3.536 3.536M9 11l-6 6v3h3l6-6"/>
+              <path d="M22 2l-7 7"/>
+            </svg>
+          </span>
+          Skills
+        </h4>
+        <ul class="skills-list">
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>JavaScript</li>
+          <li>React</li>
+          <li>Node.js</li>
+          <li>Git</li>
+        </ul>
+      </div>
+      <div class="section projects" id="projects">
+        <h4>
+          <span class="icon">
+            <!-- Folder icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 7a2 2 0 0 1 2-2h3.17a2 2 0 0 1 1.41.59l1.83 1.83A2 2 0 0 0 13.83 8H19a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            </svg>
+          </span>
+          Projects
+        </h4>
+        <ul class="projects-list">
+          <li><a href="https://github.com/jasmineno/portfolio" target="_blank">Portfolio Website</a></li>
+          <li><a href="https://github.com/jasmineno/todo-app" target="_blank">Todo App</a></li>
+          <li><a href="https://github.com/jasmineno/blog" target="_blank">Personal Blog</a></li>
+        </ul>
+      </div>
+      <div class="section contact" id="contact">
+        <h4>
+          <span class="icon">
+            <!-- Mail icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="5" width="18" height="14" rx="2"/>
+              <polyline points="3 7 12 13 21 7"/>
+            </svg>
+          </span>
+          Contact
+        </h4>
+        <div class="contact-info">
+          <span>
+            <span class="icon">
+              <!-- Envelope icon -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="5" width="18" height="14" rx="2"/>
+                <polyline points="3 7 12 13 21 7"/>
+              </svg>
+            </span>
+            Email: <a href="mailto:jjno@smu.edu">jjno@smu.edu</a>
+          </span>
+          <span>
+            <span class="icon">
+              <!-- Phone icon -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92V21a2 2 0 0 1-2.18 2A19.72 19.72 0 0 1 3 5.18 2 2 0 0 1 5 3h4.09a2 2 0 0 1 2 1.72c.13 1.13.37 2.23.72 3.28a2 2 0 0 1-.45 2.11l-1.27 1.27a16 16 0 0 0 6.29 6.29l1.27-1.27a2 2 0 0 1 2.11-.45c1.05.35 2.15.59 3.28.72A2 2 0 0 1 22 16.92z"/>
+              </svg>
+            </span>
+            Phone: <a href="tel:562-293-6749">562-293-6749</a>
+          </span>
+          <span>
+            <span class="icon">
+              <!-- Location icon -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 6-9 13-9 13s-9-7-9-13a9 9 0 1 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+            </span>
+            Location: Dallas, Texas
+          </span>
+        </div>
+      </div>
+      <div class="section links" id="links">
+        <h4>
+          <span class="icon">
+            <!-- Link icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 13a5 5 0 0 1 7 7l-1 1a5 5 0 0 1-7-7"/>
+              <path d="M14 11a5 5 0 0 0-7-7l-1 1a5 5 0 0 0 7 7"/>
+            </svg>
+          </span>
+          Links
+        </h4>
+        <div class="social-links">
+          <a href="mailto:jjno@smu.edu" target="_blank" title="Outlook Email">
+            <span class="icon">
+              <!-- Outlook icon (envelope) -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="5" width="18" height="14" rx="2"/>
+                <polyline points="3 7 12 13 21 7"/>
+              </svg>
+            </span>
+            <span>Outlook</span>
+          </a>
+          <a href="https://linkedin.com/in/jasmineno" target="_blank" title="LinkedIn">
+            <span class="icon">
+              <!-- LinkedIn icon -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5"/>
+                <line x1="7" y1="10" x2="7" y2="17"/>
+                <line x1="7" y1="7" x2="7" y2="7"/>
+                <line x1="11" y1="10" x2="11" y2="17"/>
+                <path d="M15 10a2 2 0 0 1 4 0v7"/>
+              </svg>
+            </span>
+            <span>LinkedIn</span>
+          </a>
+          <a href="https://github.com/jasmineno" target="_blank" title="GitHub">
+            <span class="icon">
+              <!-- GitHub icon -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.48 2.87 8.28 6.84 9.63.5.09.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.62-3.37-1.36-3.37-1.36-.45-1.18-1.1-1.5-1.1-1.5-.9-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.27 2.75 1.04a9.38 9.38 0 0 1 5 0c1.91-1.31 2.75-1.04 2.75-1.04.55 1.42.2 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.07.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.58.69.48A10.01 10.01 0 0 0 22 12.26C22 6.58 17.52 2 12 2Z"/>
+            </span>
+            <span>GitHub</span>
+          </a>
+          <a href="https://twitter.com/jasmineno" target="_blank" title="Twitter">
+            <span class="icon">
+              <!-- Twitter icon -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53A4.48 4.48 0 0 0 22.43.36a9.09 9.09 0 0 1-2.88 1.1A4.52 4.52 0 0 0 16.11 0c-2.5 0-4.52 2.02-4.52 4.52 0 .35.04.7.11 1.03C7.69 5.4 4.07 3.7 1.64.95c-.38.65-.6 1.4-.6 2.2 0 1.52.77 2.86 1.94 3.65A4.48 4.48 0 0 1 .96 6.1v.06c0 2.13 1.52 3.9 3.54 4.3-.37.1-.76.16-1.16.16-.28 0-.55-.03-.82-.08.55 1.72 2.15 2.97 4.05 3A9.05 9.05 0 0 1 0 19.54a12.8 12.8 0 0 0 6.95 2.04c8.34 0 12.9-6.91 12.9-12.9 0-.2 0-.39-.01-.58A9.22 9.22 0 0 0 23 3z"/>
+            </span>
+            <span>Twitter</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Decorative SVG doodle at the bottom: Trees, leaves, and mushroom -->
+  <svg class="doodle-bottom" width="320" height="80" viewBox="0 0 320 80" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto;">
+    <!-- Trees -->
+    <rect x="40" y="60" width="8" height="18" rx="3" fill="#7B5E3B"/>
+    <ellipse cx="44" cy="60" rx="14" ry="10" fill="#A7C7A3" opacity="0.85"/>
+    <ellipse cx="44" cy="55" rx="8" ry="6" fill="#B7A99A" opacity="0.7"/>
+    <!-- Pine tree -->
+    <polygon points="270,75 280,60 290,75" fill="#6B8F71" opacity="0.8"/>
+    <polygon points="272,70 280,63 288,70" fill="#A3A380" opacity="0.7"/>
+    <rect x="277" y="75" width="6" height="8" rx="2" fill="#7B5E3B"/>
+    <!-- Mushroom -->
+    <ellipse cx="160" cy="70" rx="12" ry="6" fill="#D8CFC4"/>
+    <ellipse cx="160" cy="67" rx="12" ry="6" fill="#B7A99A"/>
+    <ellipse cx="160" cy="65" rx="12" ry="6" fill="#D8CFC4"/>
+    <ellipse cx="160" cy="63" rx="12" ry="6" fill="#B7A99A"/>
+    <ellipse cx="160" cy="61" rx="12" ry="6" fill="#D8CFC4"/>
+    <!-- Journal doodle: tape -->
+    <rect x="110" y="10" width="40" height="8" rx="3" fill="#E6DED7" stroke="#B7A99A" stroke-width="1.2" opacity="0.7"/>
+    <rect x="200" y="10" width="30" height="8" rx="3" fill="#E6DED7" stroke="#B7A99A" stroke-width="1.2" opacity="0.7"/>
+    <!-- Dotted line for journal style -->
+    <line x1="10" y1="78" x2="310" y2="78" stroke="#B7A99A" stroke-width="1.2" stroke-dasharray="5,5" opacity="0.5"/>
+    <!-- Extra leaf -->
+    <ellipse cx="300" cy="60" rx="10" ry="5" fill="#A7C7A3" opacity="0.7"/>
+  </svg>
+  <div style="width:100%;text-align:center;margin:1.5rem 0 1rem 0;font-family:'Georgia',serif;font-size:1.08rem;color:#7B5E3B;letter-spacing:1.5px;opacity:0.85;">
+    &#169; Created 2025
+  </div>
+  <script>
+    function previewProfilePic(event) {
+      const file = event.target.files[0];
+      const img = document.getElementById('profileImage');
+      const defaultSVG = "data:image/svg+xml;utf8,<svg width='110' height='110' xmlns='http://www.w3.org/2000/svg'><circle cx='55' cy='55' r='52' fill='%23f7f7f7'/><circle cx='55' cy='48' r='20' fill='%23b7c68b'/><ellipse cx='55' cy='85' rx='28' ry='18' fill='%23a3a380'/></svg>";
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        img.src = defaultSVG;
+      }
+    }
+
+    // --- Tabs navigation logic ---
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabs = document.querySelectorAll('.tabs-nav a');
+      const sections = ['about', 'skills', 'projects', 'contact', 'links'].map(id => document.getElementById(id));
+
+      // Scroll to section and highlight tab
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function(e) {
+          const hash = this.getAttribute('href');
+          const section = document.querySelector(hash);
+          if (section) {
+            e.preventDefault();
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Highlight tab
+            tabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            // Briefly highlight section
+            section.style.boxShadow = '0 0 0 4px var(--accent2)';
+            setTimeout(() => section.style.boxShadow = '', 700);
+          }
+        });
+      });
+
+      // Highlight tab on scroll
+      window.addEventListener('scroll', function() {
+        let found = false;
+        sections.forEach((section, idx) => {
+          const rect = section.getBoundingClientRect();
+          if (!found && rect.top < window.innerHeight/2 && rect.bottom > 80) {
+            tabs.forEach(t => t.classList.remove('active'));
+            tabs[idx].classList.add('active');
+            found = true;
+          }
+        });
+      });
+    });
+
+    // Floating leaves animation for extra whimsy (detailed SVGs)
+    function randomBetween(a, b) {
+      return Math.random() * (b - a) + a;
+    }
+    function createLeaf() {
+      const leaf = document.createElement('div');
+      leaf.className = 'floating-leaf';
+
+      // Decide which container: left (40% width) or main (full width)
+      const useLeft = Math.random() < 0.5;
+      if (useLeft) {
+        // Left side: restrict to 0-40% of viewport
+        leaf.style.left = randomBetween(0, window.innerWidth * 0.4 - 36) + 'px';
+      } else {
+        // Main: 40%-100% of viewport
+        leaf.style.left = randomBetween(window.innerWidth * 0.4, window.innerWidth - 36) + 'px';
+      }
+      leaf.style.top = '-40px';
+      leaf.style.animationDuration = randomBetween(6, 12) + 's';
+
+      // Choose a random leaf style for variety
+      const leafTypes = [
+        // Classic leaf with veins
+        `<svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <ellipse cx="18" cy="18" rx="14" ry="7" fill="#A7C7A3"/>
+          <path d="M18 11 Q20 18 18 25 Q16 18 18 11Z" fill="#6B8F71" opacity="0.7"/>
+          <path d="M18 11 L18 25" stroke="#7B5E3B" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M18 18 Q21 17 23 14" stroke="#7B5E3B" stroke-width="0.8" opacity="0.5"/>
+          <path d="M18 18 Q15 17 13 14" stroke="#7B5E3B" stroke-width="0.8" opacity="0.5"/>
+        </svg>`,
+        // Pointy leaf with central vein
+        `<svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <path d="M18 6 Q28 18 18 30 Q8 18 18 6Z" fill="#B7C68B"/>
+          <path d="M18 6 L18 30" stroke="#6B8F71" stroke-width="1.2"/>
+          <path d="M18 18 Q23 15 26 18" stroke="#6B8F71" stroke-width="0.7" opacity="0.5"/>
+          <path d="M18 18 Q13 15 10 18" stroke="#6B8F71" stroke-width="0.7" opacity="0.5"/>
+        </svg>`,
+        // Rounded leaf with accent
+        `<svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <ellipse cx="18" cy="18" rx="13" ry="8" fill="#A3A380"/>
+          <ellipse cx="18" cy="18" rx="7" ry="3" fill="#6B8F71" opacity="0.3"/>
+          <path d="M18 10 L18 26" stroke="#7B5E3B" stroke-width="1"/>
+        </svg>`,
+        // Oak-like leaf
+        `<svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <path d="M18 6 Q20 10 24 10 Q28 10 26 14 Q28 16 25 18 Q28 20 25 22 Q28 24 24 26 Q20 26 18 30 Q16 26 12 26 Q8 26 10 22 Q8 20 11 18 Q8 16 11 14 Q8 10 12 10 Q16 10 18 6Z" fill="#B7C68B"/>
+          <path d="M18 6 L18 30" stroke="#7B5E3B" stroke-width="1.1"/>
+        </svg>`,
+        // New: Maple leaf
+        `<svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <path d="M18 6 L20 14 L28 12 L22 18 L28 22 L20 20 L18 30 L16 20 L8 22 L14 18 L8 12 L16 14 Z" fill="#A7C7A3" stroke="#7B5E3B" stroke-width="1"/>
+        </svg>`,
+        // New: Acorn
+        `<svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <ellipse cx="18" cy="24" rx="8" ry="7" fill="#B7A99A"/>
+          <ellipse cx="18" cy="19" rx="10" ry="5" fill="#A3A380"/>
+          <rect x="16" y="10" width="4" height="7" rx="2" fill="#7B5E3B"/>
+        </svg>`
+      ];
+      leaf.innerHTML = leafTypes[Math.floor(Math.random() * leafTypes.length)];
+      if (useLeft) {
+        document.getElementById('floating-leaves-left').appendChild(leaf);
+      } else {
+        document.getElementById('floating-leaves').appendChild(leaf);
+      }
+      setTimeout(() => leaf.remove(), 13000);
+    }
+    setInterval(createLeaf, 1800);
+    // Initial leaves
+    for (let i = 0; i < 5; i++) setTimeout(createLeaf, i * 900);
+
+    // --- Enhanced leaf animation for balance ---
+    function createBalancedLeaf() {
+      const leaf = document.createElement('div');
+      leaf.className = 'floating-leaf';
+      leaf.style.left = randomBetween(0, window.innerWidth - 36) + 'px';
+      leaf.style.top = '-40px';
+      leaf.style.animationDuration = randomBetween(6, 12) + 's';
+
+      // Restrict left container leaves to the left 40% of the viewport
+      if (Math.random() < 0.5) {
+        leaf.style.left = randomBetween(0, window.innerWidth * 0.4) + 'px';
+        document.getElementById('floating-leaves-left').appendChild(leaf);
+      } else {
+        leaf.style.left = randomBetween(0, window.innerWidth - 36) + 'px';
+        document.getElementById('floating-leaves').appendChild(leaf);
+      }
+
+      // Choose a random leaf style for variety
+      const leafTypes = [
+        // Classic leaf with veins
+        `<svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <ellipse cx="18" cy="18" rx="14" ry="7" fill="#A7C7A3"/>
+          <path d="M18 11 Q20 18 18 25 Q16 18 18 11Z" fill="#6B8F71" opacity="0.7"/>
+          <path d="M18 11 L18 25" stroke="#7B5E3B" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M18 18 Q21 17 23 14" stroke="#7B5E3B" stroke-width="0.8" opacity="0.5"/>
+          <path d="M18 18 Q15 17 13 14" stroke="#7B5E3B" stroke-width="0.8" opacity="0.5"/>
+        </svg>`,
+        // Pointy leaf with central vein
+        `<svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <path d="M18 6 Q28 18 18 30 Q8 18 18 6Z" fill="#B7C68B"/>
+          <path d="M18 6 L18 30" stroke="#6B8F71" stroke-width="1.2"/>
+          <path d="M18 18 Q23 15 26 18" stroke="#6B8F71" stroke-width="0.7" opacity="0.5"/>
+          <path d="M18 18 Q13 15 10 18" stroke="#6B8F71" stroke-width="0.7" opacity="0.5"/>
+        </svg>`,
+        // Rounded leaf with accent
+        `<svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <ellipse cx="18" cy="18" rx="13" ry="8" fill="#A3A380"/>
+          <ellipse cx="18" cy="18" rx="7" ry="3" fill="#6B8F71" opacity="0.3"/>
+          <path d="M18 10 L18 26" stroke="#7B5E3B" stroke-width="1"/>
+        </svg>`,
+        // Oak-like leaf
+        `<svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <path d="M18 6 Q20 10 24 10 Q28 10 26 14 Q28 16 25 18 Q28 20 25 22 Q28 24 24 26 Q20 26 18 30 Q16 26 12 26 Q8 26 10 22 Q8 20 11 18 Q8 16 11 14 Q8 10 12 10 Q16 10 18 6Z" fill="#B7C68B"/>
+          <path d="M18 6 L18 30" stroke="#7B5E3B" stroke-width="1.1"/>
+        </svg>`,
+        // New: Maple leaf
+        `<svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <path d="M18 6 L20 14 L28 12 L22 18 L28 22 L20 20 L18 30 L16 20 L8 22 L14 18 L8 12 L16 14 Z" fill="#A7C7A3" stroke="#7B5E3B" stroke-width="1"/>
+        </svg>`,
+        // New: Acorn
+        `<svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <ellipse cx="18" cy="24" rx="8" ry="7" fill="#B7A99A"/>
+          <ellipse cx="18" cy="19" rx="10" ry="5" fill="#A3A380"/>
+          <rect x="16" y="10" width="4" height="7" rx="2" fill="#7B5E3B"/>
+        </svg>`
+      ];
+      leaf.innerHTML = leafTypes[Math.floor(Math.random() * leafTypes.length)];
+      setTimeout(() => leaf.remove(), 13000);
+    }
+    setInterval(createBalancedLeaf, 1800);
+    // Initial leaves
+    for (let i = 0; i < 5; i++) setTimeout(createBalancedLeaf, i * 900);
+  </script>
+</body>
+</html>
